@@ -5,12 +5,7 @@ The repository contains the codes and data for the manuscript "Design of robust 
 We have provided the code for training, network design, and backbone analysis, along with the training data and corresponding design results. Due to the large file sizes,the initial data, the design results and trained models have been compressed in .7z format and are available in the release section.
 
 # Initial Network Data
-The synthetic and real network datasets used for the design tasks are located in the `Data` folder.  
-To access the data, please navigate to the `Data` directory and execute the following commands:
-```bash
-cd Data
-cat data.tar.gz.* | tar xzvf -
-```
+The synthetic and real network datasets used for the design tasks are available in the Data.7z file in the Release section. They should be downloaded and extracted into the ./Data directory.
 
 # Initialize Env
 1. Install the required packages based on the **requiements** file.
