@@ -29,7 +29,6 @@ python train_cost.py
 ```
 
 # Design
-
 ```bash
 cd RL_Algorithm
 python Design_synthetic_networks.py
