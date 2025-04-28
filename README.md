@@ -11,7 +11,7 @@ To access the data, please navigate to the `Data` directory and execute the foll
 ```bash
 cd Data
 cat data.tar.gz.* | tar xzvf -
-
+```
 
 # Code
 For implementation, please follow steps below:
