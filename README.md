@@ -22,13 +22,33 @@ cat data.tar.gz.* | tar xzvf -
 
 # Train
 
-1. Confirme the file path and training parameters including the attack strategies.
-
-4. run main,py
+```bash
+cd RL_Algorithm
+python train.py
+python train_cost.py
+```
 
 # Design
 
+```bash
+cd RL_Algorithm
+python Design_synthetic_networks.py
+python Design_large_networks.py
+python Case_of_synthetics.py
+python Design_real_networks.py
+python Case_of_Real_Networks.py
+python Design_real_networks_cost
+```
+
 # Silhouette_Analysis
+
+```bash
+cd Silhouette_Analysis
+python backbone_for_100.py
+python backbone_for_600.py
+python backbone_for_Real.py
+python backbone_Statistic.py
+```
 
 # Issues
 If you find a problem with the implementation code, please ask under issue or contact us.
