@@ -2,12 +2,11 @@
 The repository contains the codes and data for the manuscript "Design of robust networks via reinforcement learning prompt the emergence of multi-backbones".
 
 # Overview
-We have provided the code for training, network design, and backbone analysis, along with the training data and corresponding design results. Due to the large file sizes, the design results and trained models have been compressed in .7z format and are available in the release section.
+We have provided the code for training, network design, and backbone analysis, along with the training data and corresponding design results. Due to the large file sizes,the initial data, the design results and trained models have been compressed in .7z format and are available in the release section.
 
 # Initial Network Data
 The synthetic and real network datasets used for the design tasks are located in the `Data` folder.  
 To access the data, please navigate to the `Data` directory and execute the following commands:
-
 ```bash
 cd Data
 cat data.tar.gz.* | tar xzvf -
@@ -21,7 +20,6 @@ cat data.tar.gz.* | tar xzvf -
 4. Activate the Env.
 
 # Train
-
 ```bash
 cd RL_Algorithm
 python train.py
@@ -39,8 +37,10 @@ python Case_of_Real_Networks.py
 python Design_real_networks_cost
 ```
 
-# Silhouette_Analysis
+# Reproduce main results
 
+
+# Silhouette_Analysis
 ```bash
 cd Silhouette_Analysis
 python backbone_for_100.py
