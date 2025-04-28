@@ -1,11 +1,18 @@
 # Design_Robust_Network
-The repository contains the codes for the manuscript "Design of robust networks via reinforcement learning prompt the emergence of multi-backbones".
+The repository contains the codes and data for the manuscript "Design of robust networks via reinforcement learning prompt the emergence of multi-backbones".
 
 # Overview
-For code, we provide the codes of our RL framework and the attack pool.
-For data, we provide two real networks experimented in our work.
-# Data
-The topology data of Germany grid is from "https://icon.colorado.edu/networks", and the data of Sprintlink ISP network is from "https://research.cs.washington.edu/networking/rocketfuel/interactive/".
+We have provided the code for training, network design, and backbone analysis, along with the training data and corresponding design results. Due to the large file sizes, the design results and trained models have been compressed in 7z format and are available in the release section.
+
+# Initial Network Data
+The synthetic and real network datasets used for the design tasks are located in the `Data` folder.  
+To access the data, please navigate to the `Data` directory and execute the following commands:
+
+```bash
+cd Data
+cat data.tar.gz.* | tar xzvf -
+
+
 # Code
 For implementation, please follow steps below:
 1. Install the required packages based on the **requiements** file.
