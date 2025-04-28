@@ -26,14 +26,23 @@ python train_cost.py
 cd RL_Algorithm
 python Design_synthetic_networks.py
 python Design_large_networks.py
-python Case_of_synthetics.py
 python Design_real_networks.py
-python Case_of_Real_Networks.py
 python Design_real_networks_cost
 ```
 
 # Reproduce main results
+## Data and Model Preparation
+- The synthetic and real network datasets are available in the `Data.7z` file (Release section).  
+  Please extract it into the `./Data` directory.
+- The trained models and designed network results are provided in `Trained_models.7z` and `Design_result.7z` (Release section).  
+  Before reproducing results, please extract these two files into their corresponding subfolders `/Trained_models` and `/Design_result` under the `/RL_Algorithm` directory.
 
+## Design cases on synthetic and real-world networks
+```bash
+cd RL_Algorithm
+python Case_of_synthetics.py
+python Case_of_Real_Networks.py
+```
 
 ## Silhouette_Analysis
 ```bash
