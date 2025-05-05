@@ -108,7 +108,7 @@ def draw_pyvis_graph_fix_pos(path,G0,G1,name,G2=0):
     # 设置节点位置
     import json
     if name=='Step 0' or name=='Step 50':
-        with open('./Design_result/'+'one_case_position.json', 'r') as f:
+        with open('./Design_result/synthetic_result/'+'one_case_position.json', 'r') as f:
             positions = json.load(f)
     else:
         with open("../Silhouette_Analysis/backbone_result/N600/"+'position_shown_backbone.json', 'r') as f:
