@@ -89,16 +89,17 @@ def main(args,Env):
                         # # 保存结果
                     torch.save(rl_result,out_path+"N%s/%s_%s_rl_result.pth"%(n,attack,graph_type,n))
 
-                Robustness_score = [x[0] for x in rl_result]
-                # 计算标准差
-                std_dev = statistics.stdev(Robustness_score)
-                mean = sum(Robustness_score) / len(Robustness_score)
-                print(attack, graph_type, n)
-                print('average:', mean)
-                print('std:', std_dev)
+                # Robustness_score = [x[0] for x in rl_result]
+                # # 计算标准差
+                # std_dev = statistics.stdev(Robustness_score)
+                # mean = sum(Robustness_score) / len(Robustness_score)
+                # print(attack, graph_type, n)
+                # print('average:', mean)
+                # print('std:', std_dev)
 
 if __name__=='__main__':
     parser = argparse.ArgumentParser("")
     args = parser.parse_args()
     env = env
+
     main(args, env)
