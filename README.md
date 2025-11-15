@@ -30,6 +30,12 @@ python Design_real_networks.py
 python Design_real_networks_cost
 ```
 
+## Design under memory optimization
+```bash
+cd RL_Algorithm
+python Design_networks_optimal_memory.py
+```
+
 # Reproduce main results
 ## Data and Model Preparation
 - The synthetic and real network datasets are available in the `Data.7z` file (Release section).  
@@ -51,12 +57,6 @@ python backbone_for_100.py
 python backbone_for_600.py
 python backbone_for_Real.py
 python backbone_Statistic.py
-```
-
-## Design under memory optimization
-```bash
-cd RL_Algorithm
-python Design_networks_optimal_memory.py
 ```
 
 # Issues
