@@ -1,7 +1,7 @@
 import argparse
 import torch
 from RL_Algorithm.Environment.dismantlers.dismantlers_ import dismantle
-from RL_Algorithm.model.PPO import PPO
+from RL_Algorithm.model.PPO_conservative import PPO
 import copy
 from itertools import count
 from Environment.envs import env
@@ -93,4 +93,5 @@ if __name__=='__main__':
     parser = argparse.ArgumentParser("")
     args = parser.parse_args()
     env = env
+
     main(args, env)
