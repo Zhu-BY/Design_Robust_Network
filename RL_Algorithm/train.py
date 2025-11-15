@@ -2,7 +2,7 @@ import sys
 sys.path.append('')
 import argparse
 from RL_Algorithm.Environment.dismantlers.dismantlers_ import dismantle
-from RL_Algorithm.model.PPO import PPO,RewardScaling
+from RL_Algorithm.model.PPO_conservative import PPO,RewardScaling
 from RL_Algorithm.model.pretrain_policy_net import pretrain_actor_net
 from collections import namedtuple
 from itertools import count
@@ -190,4 +190,5 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
     env = env
+
     main(args, env)
