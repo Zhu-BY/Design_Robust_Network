@@ -14,35 +14,37 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 def evaluate_policy(args, env, agent,virtual_node_g,add_edges=100,):
     graph_ids = list(range(100))
-    # action_dict = env.action_dict
     R_G_list = []
-    for id_ in graph_ids:
-        print(id_)
-        G0,_ = env.reset(id_,infer=True)
-        if args.n>=1000:
-            add_edges = int(args.n/10)
-        G = copy.deepcopy(G0)
-        G_list = [G0]
-        for t in count():
-            state = virtual_node_g(G)
-            edge_mask_matrix = edge_mask(G)
-            action, action_prob = agent.select_action(state,edge_mask_matrix,evaluation=True)
-            act = action_to_edge(action, args.num_nodes)
-            G.add_edge(act[0],act[1])
-            G_list.append(copy.deepcopy(G))
-            if len(G.edges()) >= len(G0.edges)+add_edges:
-                episode_reward,_,_ = dismantle(env.dismantling_name,G,env.dis_p_n,agent.path+"/")
-                break
-        R_G_list.append([episode_reward,copy.deepcopy(G),G_list])
-    return R_G_list
+    with torch.no_grad():
+        for id_ in graph_ids:
+            print(id_)
+            G0,_ = env.reset(id_,infer=True)
+            if args.num_nodes>=1000:
+                add_edges = int(args.num_nodes/10)
+            G = copy.deepcopy(G0)
+            G_list = [G0]
+            for t in count():
+                state = virtual_node_g(G)
+                edge_mask_matrix = edge_mask(G)
+                action, action_prob = agent.select_action(state,edge_mask_matrix,evaluation=True)
+                act = action_to_edge(action, args.num_nodes)
+                G.add_edge(act[0],act[1])
+                G_list.append(copy.deepcopy(G))
+                if len(G.edges()) >= len(G0.edges)+add_edges:
+                    episode_reward,_,_ = dismantle(env.dismantling_name,G,env.dis_p_n,agent.path+"/")
+                    break
+            R_G_list.append([episode_reward,copy.deepcopy(G),G_list])
+        return R_G_list
 
 def main(args,Env):
     model_path = "./Trained_models/uniform_cost/"
     out_path = "./Design_result/synthetic_result/"
     file_names = os.listdir(model_path)
     graph_types = ['BA','ER']
+    # graph_types = ['BA']
     attack_types =['HDA','HBA','CI2','MS','GND','GNDR']
-    ns=[600,1000,5000]
+    # attack_types =['HDA']
+    ns=[1000]
     for n in ns:
         edge_indices = create_edge_indices(n)  # (num_edges, 2)
         for graph_type in graph_types: # 对于每一类网络进行设计
@@ -91,15 +93,17 @@ def main(args,Env):
 
                 # Robustness_score = [x[0] for x in rl_result]
                 # # 计算标准差
-                # std_dev = statistics.stdev(Robustness_score)
-                # mean = sum(Robustness_score) / len(Robustness_score)
-                # print(attack, graph_type, n)
-                # print('average:', mean)
-                # print('std:', std_dev)
+                # try:
+                #     std_dev = statistics.stdev(Robustness_score)
+                #     mean = sum(Robustness_score) / len(Robustness_score)
+                #     print(attack, graph_type, n)
+                #     print('average:', mean)
+                #     print('std:', std_dev)
+                # except:
+                #     print('need calculate R')
 
 if __name__=='__main__':
     parser = argparse.ArgumentParser("")
     args = parser.parse_args()
     env = env
-
     main(args, env)
