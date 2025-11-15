@@ -53,5 +53,11 @@ python backbone_for_Real.py
 python backbone_Statistic.py
 ```
 
+## Design under memory optimization
+```bash
+cd RL_Algorithm
+python Design_networks_optimal_memory.py
+```
+
 # Issues
 If you find a problem with the implementation code, please ask under issue or contact us.
