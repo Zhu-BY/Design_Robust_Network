@@ -1,17 +1,7 @@
-'''
-generate graph from a tree,
-GCN用每两个节点的表示的拼接表示待连接的边特征，来预测边的策略选择，
-action输出一个数，对应于两个节点
-
-ppo_max:
-1 advantage normalization
-2 reward scailing
-'''
 import sys
-sys.path.append('/root/autodl-tmp/tmp/Optimal_Graph_Generation')
-from collections import namedtuple
-from itertools import count
-import os, time
+sys.path.append('')
+import os
+# from gym.wrappers.normalize import RunningMeanStd
 import torch.optim as optim
 from torch.distributions import Normal, Categorical
 from torch.utils.data.sampler import BatchSampler, SubsetRandomSampler
@@ -24,11 +14,11 @@ import time
 import copy
 # from Environments.envs import Env1_tree_add_edge
 from RL_Algorithm.utils.rl_utils import graph_batch
-from Environments.utils import draw_G
+# from Environment.utils import draw_G
 import dgl
 from dgl.nn import GraphConv
 # from RL_Algorithms.Virtual_Node_Embedding.gnn_net import Actor_no_weight,Critic,RewardScaling
-from RL_Algorithms.Virtual_Node_Embedding.gnn_net_optimal import Actor_no_weight,Critic,RewardScaling
+from RL_Algorithm.model.net import Actor,Critic
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 class PPO():
@@ -55,7 +45,7 @@ class PPO():
         self.lr_a = args.lr_a
         self.lr_c = args.lr_c
         self.value_first=args.value_first # 先訓練valuenetwork的次數
-        self.actor_net = Actor_no_weight(args).to(device)
+        self.actor_net = Actor(args).to(device)
         self.critic_net = Critic(args).to(device)
         self.buffer = []
         self.counter = 0
@@ -67,23 +57,16 @@ class PPO():
         self.actor_optimizer = optim.Adam(self.actor_net.parameters(), lr=self.lr_a,eps=1e-5)
         self.critic_net_optimizer = optim.Adam(self.critic_net.parameters(), lr=self.lr_c,eps=1e-5)
         if creat_file:
-            try:
-                if args.general==True:
-                    if not os.path.exists('/root/autodl-tmp/tmp/Optimal_Graph_Generation/RL_Algorithms/Virtual_Node_Embedding/%s_%s_%s_%s/param' % (args.dismantling_name,args.graph_type,args.num_nodes,self.nowtime)):
-                        os.makedirs('/root/autodl-tmp/tmp/Optimal_Graph_Generation/RL_Algorithms/Virtual_Node_Embedding/%s_%s_%s_%s/param/net_param' % (args.dismantling_name,args.graph_type,args.num_nodes,self.nowtime))
-                        os.makedirs('/root/autodl-tmp/tmp/Optimal_Graph_Generation/RL_Algorithms/Virtual_Node_Embedding/%s_%s_%s_%s/param/img' % (args.dismantling_name,args.graph_type,args.num_nodes,self.nowtime))
-                    self.path ="/root/autodl-tmp/tmp/Optimal_Graph_Generation/RL_Algorithms/Virtual_Node_Embedding/%s_%s_%s_%s"% (args.dismantling_name,args.graph_type,args.num_nodes,self.nowtime)
-                if args.general=='Pre Train':
-                    if not os.path.exists('/root/autodl-tmp/tmp/Optimal_Graph_Generation/RL_Algorithms/Virtual_Node_Embedding/Pre_%s_%s_%s_%s/param' % (args.dismantling_name,args.graph_type,args.num_nodes,self.nowtime)):
-                        os.makedirs('/root/autodl-tmp/tmp/Optimal_Graph_Generation/RL_Algorithms/Virtual_Node_Embedding/Pre_%s_%s_%s_%s/param/net_param' % (args.dismantling_name,args.graph_type,args.num_nodes,self.nowtime))
-                        os.makedirs('/root/autodl-tmp/tmp/Optimal_Graph_Generation/RL_Algorithms/Virtual_Node_Embedding/Pre_%s_%s_%s_%s/param/img' % (args.dismantling_name,args.graph_type,args.num_nodes,self.nowtime))
-                    self.path ="/root/autodl-tmp/tmp/Optimal_Graph_Generation/RL_Algorithms/Virtual_Node_Embedding/Pre_%s_%s_%s_%s"% (args.dismantling_name,args.graph_type,args.num_nodes,self.nowtime)
-            except:
-                if not os.path.exists('/root/autodl-tmptmp//Optimal_Graph_Generation/RL_Algorithms/Virtual_Node_Embedding/%s_%s/param'%(args.num_nodes,self.nowtime)):
-                    os.makedirs('/root/autodl-tmp/tmp/Optimal_Graph_Generation/RL_Algorithms/Virtual_Node_Embedding/%s_%s/param/net_param'%(args.num_nodes,self.nowtime))
-                    os.makedirs('/root/autodl-tmp/tmp/Optimal_Graph_Generation/RL_Algorithms/Virtual_Node_Embedding/%s_%s/param/img'%(args.num_nodes,self.nowtime))
-                self.path = "/root/autodl-tmp/tmp/Optimal_Graph_Generation/RL_Algorithms/Virtual_Node_Embedding/%s_%s"% (args.num_nodes,self.nowtime)
-            # self.writer = SummaryWriter(self.path+'/exp')
+            if args.pretrain==False:
+                if not os.path.exists('./Trained_models/uniform_cost/%s_%s_%s_%s/param' % (args.dismantling_name,args.graph_type,args.num_nodes,self.nowtime)):
+                    os.makedirs('./Trained_models/uniform_cost/%s_%s_%s_%s/param/net_param' % (args.dismantling_name,args.graph_type,args.num_nodes,self.nowtime))
+                    os.makedirs('./Trained_models/uniform_cost/%s_%s_%s_%s/param/img' % (args.dismantling_name,args.graph_type,args.num_nodes,self.nowtime))
+                self.path ="./Trained_models/uniform_cost/%s_%s_%s_%s"% (args.dismantling_name,args.graph_type,args.num_nodes,self.nowtime)
+            if args.pretrain==True:
+                if not os.path.exists('.Trained_models/uniform_cost/Pre_%s_%s_%s_%s/param' % (args.dismantling_name,args.graph_type,args.num_nodes,self.nowtime)):
+                    os.makedirs('./Trained_models/uniform_cost/Pre_%s_%s_%s_%s/param/net_param' % (args.dismantling_name,args.graph_type,args.num_nodes,self.nowtime))
+                    os.makedirs('./Trained_models/uniform_cost/Pre_%s_%s_%s_%s/param/img' % (args.dismantling_name,args.graph_type,args.num_nodes,self.nowtime))
+                self.path ="./Trained_models/uniform_cost/Pre_%s_%s_%s_%s"% (args.dismantling_name,args.graph_type,args.num_nodes,self.nowtime)
 
     def select_action(self, state,edge_mask_matrix,evaluation = False,returnall=False):
         # state = torch.from_numpy(state.to(device),state.ndata['feat'].to(device)).float().unsqueeze(0)
@@ -108,8 +91,8 @@ class PPO():
         return value.item()
 
     def save_param(self):
-        # torch.save(self.actor_net.state_dict(), self.path+'/param/net_param/ppo_actor_net'+ str(time.time())[:10] +'.pkl')
-        # torch.save(self.critic_net.state_dict(), self.path+'/param/net_param/ppo_critic_net'+ str(time.time())[:10] +'.pkl')
+        torch.save(self.actor_net.state_dict(), self.path+'/param/net_param/ppo_actor_net'+ str(time.time())[:10] +'.pkl')
+        torch.save(self.critic_net.state_dict(), self.path+'/param/net_param/ppo_critic_net'+ str(time.time())[:10] +'.pkl')
         return 0
 
     def store_transition(self, transition):
@@ -325,5 +308,39 @@ class PPO():
         for p in self.critic_net_optimizer.param_groups:
             p['lr'] = lr_c_now
 
+class RewardScaling:
+    def __init__(self, shape, gamma):
+        self.shape = shape  # reward shape=1
+        self.gamma = gamma  # discount factor
+        self.running_ms = RunningMeanStd(shape=self.shape)
+        self.R = np.zeros(self.shape)
+
+    def __call__(self, x):
+        self.R = self.gamma * self.R + x
+        self.running_ms.update(self.R)
+        x = x /( (self.running_ms.std + 1e-8) if self.running_ms.std>1e-2 else (self.running_ms.mean+1e-8) )# Only divided std
+        return x
+
+    def reset(self):  # When an episode is done,we should reset 'self.R'
+        self.R = np.zeros(self.shape)
 
 
+class RunningMeanStd:
+    # Dynamically calculate mean and std
+    def __init__(self, shape):  # shape:the dimension of input data
+        self.n = 0
+        self.mean = np.zeros(shape)
+        self.S = np.zeros(shape)
+        self.std = np.sqrt(self.S)
+
+    def update(self, x):
+        x = np.array(x)
+        self.n += 1
+        if self.n == 1:
+            self.mean = x
+            self.std = x
+        else:
+            old_mean = self.mean.copy()
+            self.mean = old_mean + (x - old_mean) / self.n
+            self.S = self.S + (x - old_mean) * (x - self.mean)
+            self.std = np.sqrt(self.S / self.n)
