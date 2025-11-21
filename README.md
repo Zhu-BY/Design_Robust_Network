@@ -6,7 +6,6 @@ We have provided the code for training, network design, and backbone analysis, a
 
 # OS Requirements
 This package is supported for Linux. The package has been tested on the following systems:
-
 Linux: ubuntu 22.04
 
 # Install Data
