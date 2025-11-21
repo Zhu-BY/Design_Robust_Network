@@ -4,9 +4,9 @@ The repository contains the codes and data for the manuscript "Design of robust 
 # Overview
 We have provided the code for training, network design, and backbone analysis, along with the training data and corresponding design results. Due to the large file sizes,the initial data, the design results and trained models have been compressed in .7z format and are available in the release section.
 
-# OS Requirements
-This package is supported for Linux. The package has been tested on the following systems:
-Linux: ubuntu 22.04
+# System requirements
+Operating System: Tested on Ubuntu 22.04
+Python version: Python 3.10
 
 # Install Data
 The synthetic and real network datasets used for the design tasks are available in the `Data.7z` file in the Release section. They should be downloaded and extracted into the `./Data` directory.
