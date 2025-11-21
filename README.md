@@ -51,7 +51,7 @@ python Design_networks_optimal_memory.py
 ## Design cases on synthetic and real-world networks
 ```bash
 cd RL_Algorithm
-python Case_of_synthetics.py
+python Case_of_synthetics.py 
 python Case_of_Real_Networks.py
 ```
 
