@@ -6,13 +6,14 @@ We have provided the code for training, network design, and backbone analysis, a
 
 # System requirements
 Operating System: Tested on Ubuntu 22.04
+
 Python version: Python 3.10
 
 # Install Data
 The synthetic and real network datasets used for the design tasks are available in the `Data.7z` file in the Release section. They should be downloaded and extracted into the `./Data` directory.
 
 # Initialize Env
-1. Install the required packages based on the **requiements** file.
+1. Install the required packages based on the **requiements** file. The typical installation time on a standard desktop computer is less than 30 minutes.
 2. If one would like to train a design policy for MS or GND(R) attacks, the attack executable file needs to be recomplied in 
 "\dismantlers\decycler-master" or "dismantlers\Generalized-Network-Dismantling-Input" following the instructions from "https://github.com/abraunst/decycler" or "https://github.com/renxiaolong/Generalized-Network-Dismantling".
 3. If one would like to train a design policy for GDM attacks, the env and attack executable file should be set following the instructions from "[https://github.com/abraunst/decycler](https://github.com/NetworkScienceLab/GDM)"
